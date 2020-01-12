@@ -127,6 +127,7 @@ public class DiscordSRV extends JavaPlugin implements Listener {
     @Getter private long startTime = System.currentTimeMillis();
     private DynamicConfig config;
     private String consoleChannel;
+    private String accountLinkChannel;
 
     public static DiscordSRV getPlugin() {
         return getPlugin(DiscordSRV.class);
@@ -170,6 +171,11 @@ public class DiscordSRV extends JavaPlugin implements Listener {
         return StringUtils.isNotBlank(consoleChannel) && StringUtils.isNumeric(consoleChannel)
                 ? jda.getTextChannelById(consoleChannel)
                 : null;
+    }
+    public TextChannel getAccountLinkChannel() {
+        return StringUtils.isNotBlank(accountLinkChannel) && StringUtils.isNumeric(accountLinkChannel)
+            ? jda.getTextChannelById(accountLinkChannel)
+            : null;
     }
     public TextChannel getDestinationTextChannelForGameChannelName(String gameChannelName) {
         Map.Entry<String, String> entry = channels.entrySet().stream().filter(e -> e.getKey().equals(gameChannelName)).findFirst().orElse(null);
@@ -515,6 +521,8 @@ public class DiscordSRV extends JavaPlugin implements Listener {
         // set console channel
         String consoleChannelId = config().getString("DiscordConsoleChannelId");
         if (consoleChannelId != null) consoleChannel = consoleChannelId;
+
+        accountLinkChannel = config().getString("DiscordAccountLinkChannelId");
 
         // see if console channel exists; if it does, tell user where it's been assigned & add console appender
         if (serverIsLog4jCapable && StringUtils.isNotBlank(consoleChannel)) {

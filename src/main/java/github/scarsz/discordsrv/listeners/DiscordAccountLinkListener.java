@@ -20,6 +20,9 @@ package github.scarsz.discordsrv.listeners;
 
 import github.scarsz.discordsrv.DiscordSRV;
 import github.scarsz.discordsrv.api.events.DiscordPrivateMessageReceivedEvent;
+import javax.annotation.Nonnull;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -31,6 +34,17 @@ public class DiscordAccountLinkListener extends ListenerAdapter {
         if (event.getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) return;
 
         DiscordSRV.api.callEvent(new DiscordPrivateMessageReceivedEvent(event));
+
+        String reply = DiscordSRV.getPlugin().getAccountLinkManager().process(event.getMessage().getContentRaw(), event.getAuthor().getId());
+        if (reply != null) event.getChannel().sendMessage(reply).queue();
+    }
+
+    @Override
+    public void onGuildMessageReceived(@Nonnull GuildMessageReceivedEvent event) {
+        if (event.getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) return;
+
+        TextChannel channel = DiscordSRV.getPlugin().getAccountLinkChannel();
+        if(channel == null || !event.getChannel().getId().equals(channel.getId())) return;
 
         String reply = DiscordSRV.getPlugin().getAccountLinkManager().process(event.getMessage().getContentRaw(), event.getAuthor().getId());
         if (reply != null) event.getChannel().sendMessage(reply).queue();
