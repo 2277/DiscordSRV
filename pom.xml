@@ -52,6 +52,7 @@
     </properties>
 
     <build>
+        <defaultGoal>clean package</defaultGoal>
         <finalName>${project.name}-Build-${project.version}</finalName>
         <resources>
             <resource>
