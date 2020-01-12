@@ -74,6 +74,7 @@ public class RequireLinkModule implements Listener {
                         ChatColor.translateAlternateColorCodes('&', DiscordSRV.config().getString("Require linked account to play.Not linked message"))
                                 .replace("{BOT}", botName)
                                 .replace("{CODE}", code)
+                                .replace("{PLAYER}", playerName)
                 );
                 return;
             }
